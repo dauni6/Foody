@@ -3,4 +3,13 @@
     <dimen name="basic08">8dp</dimen>
     <dimen name="basic24">24dp</dimen>
     <dimen name="basic100">100dp</dimen>
+    <dimen name="basic04">4dp</dimen>
+    <dimen name="basic01">1dp</dimen>
+    <dimen name="basic10">10dp</dimen>
+    <dimen name="basic12">12dp</dimen>
+    <dimen name="basic06">6dp</dimen>
+    <dimen name="basic36">36dp</dimen>
+    <dimen name="basic50">50dp</dimen>
+    <dimen name="basic65">65dp</dimen>
+    <dimen name="basic200">200dp</dimen>
 </resources>
