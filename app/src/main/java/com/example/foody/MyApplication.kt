@@ -2,6 +2,7 @@ package com.example.foody
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 /**
  * All apps that use Hilt must contain an Application class that is annotated with @HiltAndroidApp.
@@ -10,4 +11,8 @@ import dagger.hilt.android.HiltAndroidApp
  * */
 @HiltAndroidApp
 class MyApplication: Application() {
+
+    init {
+        Timber.plant(Timber.DebugTree())
+    }
 }

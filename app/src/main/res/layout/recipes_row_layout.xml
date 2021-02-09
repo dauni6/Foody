@@ -39,6 +39,7 @@
                     android:layout_height="0dp"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
+                    app:loadImageFromUrl="@{result.image}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0"
@@ -73,6 +74,7 @@
                     android:layout_marginTop="@dimen/basic12"
                     android:ellipsize="end"
                     android:maxLines="3"
+                    android:text="@{result.summary}"
                     android:textColor="@color/darkGray"
                     app:layout_constraintEnd_toEndOf="@id/tv_title"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -105,6 +107,7 @@
                     app:layout_constraintStart_toStartOf="@id/iv_heart"
                     app:layout_constraintTop_toBottomOf="@id/iv_heart"
                     app:layout_constraintVertical_bias="0"
+                    app:setNumberOfLikes="@{result.aggregateLikes}"
                     tools:text="100" />
 
                 <ImageView
@@ -127,6 +130,7 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textColor="@color/yellow"
+                    app:setNumberOfMinutes="@{result.readyInMinutes}"
                     app:layout_constraintBottom_toBottomOf="@id/tv_heart_count"
                     app:layout_constraintEnd_toEndOf="@id/iv_clock"
                     app:layout_constraintStart_toStartOf="@id/iv_clock"
@@ -148,12 +152,13 @@
                     android:id="@+id/tv_leaf_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/txt_vegan"
                     android:textAlignment="center"
+                    app:applyVeganColor="@{result.vegan}"
                     app:layout_constraintBottom_toBottomOf="@id/tv_clock_count"
                     app:layout_constraintEnd_toEndOf="@id/iv_leaf"
                     app:layout_constraintStart_toStartOf="@id/iv_leaf"
-                    app:layout_constraintTop_toBottomOf="@id/iv_leaf"
-                    tools:text="100" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_leaf" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

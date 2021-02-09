@@ -6,4 +6,5 @@
     <string name="recipe_favorite_fragment">Favorite</string>
     <string name="foodjoke_fragment">Joke</string>
     <string name="txt_no_internet_connection_error">No Internet Connection</string>
+    <string name="txt_vegan">Vegan</string>
 </resources>
