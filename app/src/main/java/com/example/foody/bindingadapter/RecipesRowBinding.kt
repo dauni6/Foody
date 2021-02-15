@@ -27,7 +27,6 @@ object RecipesRowBinding {
     @BindingAdapter("app:applyVeganColor")
     @JvmStatic
     fun applyVeganColor(view: View, vegan: Boolean) {
-        Timber.d("vegan = $vegan")
         if (vegan) {
             when(view) {
                 is TextView -> {
@@ -45,6 +44,7 @@ object RecipesRowBinding {
     fun loadImageFromUrl(imageView: ImageView, imageUrl: String) {
         imageView.load(imageUrl) {
             crossfade(600)
+            error(R.drawable.ic_error_placeholder) // 인터넷 연결이 끊겼거나 데이터를 불러올 수 없을 때, 에러이미지 보이기
         }
     }
 

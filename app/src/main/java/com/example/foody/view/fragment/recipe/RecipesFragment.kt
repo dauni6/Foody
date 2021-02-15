@@ -7,20 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foody.R
 import com.example.foody.adapters.RecipesAdapter
+import com.example.foody.databinding.FragmentRecipesBinding
 import com.example.foody.util.Constants.Companion.API_KEY
 import com.example.foody.util.NetworkResult
+import com.example.foody.util.observeOnce
 import com.example.foody.viewmodel.MainViewModel
 import com.example.foody.viewmodel.RecipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_recipes.view.*
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class RecipesFragment : Fragment() {
 
-    private lateinit var mView: View
+    private var _binding: FragmentRecipesBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var mainViewModel: MainViewModel
     private lateinit var recipesViewModel: RecipeViewModel
     private val mAdapter by lazy { RecipesAdapter() }
@@ -35,18 +42,43 @@ class RecipesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.fragment_recipes, container, false)
-        return mView
+        _binding = FragmentRecipesBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this@RecipesFragment
+        binding.mainViewModel = this.mainViewModel
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        requestApiData()
+        readDatabase()
+
+    }
+
+    private fun setupRecyclerView() {
+        binding.recyclerView.apply {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+        }
+    }
+
+    private fun readDatabase() {
+        lifecycleScope.launch {
+            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, { database ->
+                if (database.isNotEmpty()) {
+                    Timber.d("RecipeFragment / readDatabase() is called")
+                    mAdapter.setData(database[0].foodRecipe) // 첫 번째 레시피 가져오기
+                    hideShimmerEffect()
+                } else {
+                    requestApiData()
+                }
+            })
+        }
     }
 
     private fun requestApiData() {
+        Timber.d("RecipeFragment / requestApiData() is called")
         mainViewModel.getRecipes(recipesViewModel.applyQueries())
         mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
             when(response) {
@@ -58,6 +90,7 @@ class RecipesFragment : Fragment() {
                 }
                 is NetworkResult.Error -> {
                     hideShimmerEffect()
+                    loadDataFromCache()
                     Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
                 }
                 is NetworkResult.Loading -> {
@@ -67,19 +100,30 @@ class RecipesFragment : Fragment() {
         })
     }
 
-    private fun setupRecyclerView() {
-        mView.recyclerView.apply {
-            adapter = mAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+    private fun loadDataFromCache() {
+        lifecycleScope.launch {
+            mainViewModel.readRecipes.observe(viewLifecycleOwner, { database ->
+                if (database.isNotEmpty()) {
+                    mAdapter.setData(database[0].foodRecipe)
+                }
+            })
         }
     }
 
+
     private fun showShimmerEffect() {
-        mView.recyclerView.showShimmer() // 데이터가 로딩중임을 보이기 위해 Shimmer 사용
+        binding.recyclerView.showShimmer() // 데이터가 로딩중임을 보이기 위해 Shimmer 사용
     }
 
     private fun hideShimmerEffect() {
-        mView.recyclerView.hideShimmer()
+        binding.recyclerView.hideShimmer()
+    }
+
+    // Fragment는 View보다 더 오래 지속되므로 binding 객체를 반드시 onDestroyView()에서 해제해주어야 한다.
+    // 강의에서는 onDestroy()에서 해제하지만 구글 공식문서에서는 onDestroyView()에서 해제를 권장하고 있다.
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

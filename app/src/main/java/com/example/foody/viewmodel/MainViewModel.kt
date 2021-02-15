@@ -4,21 +4,32 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.foody.data.Repository
+import com.example.foody.data.database.RecipesEntity
 import com.example.foody.model.FoodRecipe
 import com.example.foody.util.NetworkResult
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import timber.log.Timber
 
 class MainViewModel @ViewModelInject constructor(
     private val repository: Repository,
     application: Application
 ): AndroidViewModel(application) {
 
+    /** ROOM DATABASE */
+    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readDatabase().asLiveData() // coroutine Flow를 LiveData로 바꾸기 위해서 asLiveData()를 사용
+
+    private fun insertRecipes(recipesEntity: RecipesEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertRecipes(recipesEntity)
+        }
+
+    /** RETROFIT */
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
 
     fun getRecipes(queries: Map<String, String>) = viewModelScope.launch {
@@ -31,12 +42,22 @@ class MainViewModel @ViewModelInject constructor(
             try {
                 val response = repository.remote.getRecipes(queries)
                 recipesResponse.value = handleFoodRecipesResponse(response)
+                
+                // ROOM에 넣기
+                val foodRecipe = recipesResponse.value!!.data
+                foodRecipe?.let { offlineCacheRecipes(it) }
+
             } catch (e: Exception) {
                 recipesResponse.value = NetworkResult.Error(message = "Recipes not found.")
             }
         } else {
             recipesResponse.value = NetworkResult.Error(message = "No Internet Connection.")
         }
+    }
+
+    private fun offlineCacheRecipes(foodRecipe: FoodRecipe) {
+        val recipesEntity = RecipesEntity(foodRecipe)
+        insertRecipes(recipesEntity)
     }
 
     private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>? {

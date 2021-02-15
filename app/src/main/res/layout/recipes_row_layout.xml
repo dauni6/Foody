@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="result"
             type="com.example.foody.model.Result" />
@@ -142,6 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@null"
+                    app:applyVeganColor="@{result.vegan}"
                     app:layout_constraintBottom_toBottomOf="@id/iv_clock"
                     app:layout_constraintEnd_toEndOf="@id/tv_description"
                     app:layout_constraintStart_toEndOf="@id/iv_clock"
