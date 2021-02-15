@@ -12,4 +12,6 @@
     <dimen name="basic50">50dp</dimen>
     <dimen name="basic65">65dp</dimen>
     <dimen name="basic200">200dp</dimen>
+    <dimen name="txt_18">18sp</dimen>
+    <dimen name="basic16">16dp</dimen>
 </resources>
