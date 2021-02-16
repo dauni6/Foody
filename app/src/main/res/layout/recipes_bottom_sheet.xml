@@ -1,282 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
-    tools:context=".view.fragment.recipe.bottomsheet.RecipesBottomSheet">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/tv_meal_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/basic24"
-        android:layout_marginTop="@dimen/basic24"
-        android:text="@string/txt_meal_type"
-        android:textSize="@dimen/txt_18"
-        android:textStyle="bold"
-        android:textColor="@color/dark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".view.fragment.recipe.bottomsheet.RecipesBottomSheet">
 
-    <HorizontalScrollView
-        android:id="@+id/hsv_meal_type"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/basic16"
-        android:layout_marginTop="@dimen/basic12"
-        android:scrollbars="none"
-        android:overScrollMode="never"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_meal_type"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_meal_type"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/basic24"
+            android:layout_marginTop="@dimen/basic24"
+            android:text="@string/txt_meal_type"
+            android:textSize="@dimen/txt_18"
+            android:textStyle="bold"
+            android:textColor="@color/dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_meal_type"
-                android:layout_width="match_parent"
+        <HorizontalScrollView
+            android:id="@+id/hsv_meal_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/basic16"
+            android:layout_marginTop="@dimen/basic12"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_meal_type"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:checkedChip="@id/chip_main_course"
-                app:selectionRequired="true"
-                app:singleLine="true"
-                app:singleSelection="true">
+                android:orientation="horizontal">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_main_course"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_main_course"
-                    style="@style/CustomChipStyle"/>
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_meal_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:checkedChip="@id/chip_main_course"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_side_dish"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_side_dish"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_main_course"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_main_course"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_dessert"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_dessert"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_side_dish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_side_dish"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_appetizer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_appetizer"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_dessert"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_dessert"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_salad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_salad"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_appetizer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_appetizer"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_bread"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_bread"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_salad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_salad"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_breakfast"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_breakfast"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_bread"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_bread"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_soup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_soup"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_breakfast"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_breakfast"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_beverage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_beverage"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_soup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_soup"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_sauce"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_sauce"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_beverage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_beverage"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_marinade"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_marinade"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_sauce"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_sauce"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_finger_food"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_finger_food"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_marinade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_marinade"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_snack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_snack"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_finger_food"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_finger_food"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_drink"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_drink"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_snack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_snack"
+                        style="@style/CustomChipStyle" />
 
-            </com.google.android.material.chip.ChipGroup>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_drink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_drink"
+                        style="@style/CustomChipStyle" />
 
-        </LinearLayout>
+                </com.google.android.material.chip.ChipGroup>
 
-    </HorizontalScrollView>
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_diet_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/basic24"
-        android:layout_marginTop="@dimen/basic24"
-        android:text="@string/txt_diet_type"
-        android:textSize="@dimen/txt_18"
-        android:textStyle="bold"
-        android:textColor="@color/dark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hsv_meal_type"
-        app:layout_constraintVertical_bias="0" />
+        </HorizontalScrollView>
 
-    <HorizontalScrollView
-        android:id="@+id/hsv_diet_type"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/basic16"
-        android:layout_marginTop="@dimen/basic12"
-        android:scrollbars="none"
-        android:overScrollMode="never"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_diet_type"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0" >
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_diet_type"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/basic24"
+            android:layout_marginTop="@dimen/basic24"
+            android:text="@string/txt_diet_type"
+            android:textSize="@dimen/txt_18"
+            android:textStyle="bold"
+            android:textColor="@color/dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_meal_type"
+            app:layout_constraintVertical_bias="0" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_diet_type"
-                android:layout_width="match_parent"
+        <HorizontalScrollView
+            android:id="@+id/hsv_diet_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/basic16"
+            android:layout_marginTop="@dimen/basic12"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_diet_type"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:checkedChip="@id/chip_gluten_free"
-                app:selectionRequired="true"
-                app:singleLine="true"
-                app:singleSelection="true">
+                android:orientation="horizontal">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_gluten_free"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_gluten_free"
-                    style="@style/CustomChipStyle"/>
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_diet_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:checkedChip="@id/chip_gluten_free"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_ketogenic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_ketogenic"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_gluten_free"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_gluten_free"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_vegetarian"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_vegetarian"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_ketogenic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_ketogenic"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_vegan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_vegan"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_vegetarian"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_vegetarian"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_pescetarian"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_pescetarian"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_vegan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_vegan"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_paleo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_paleo"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_pescetarian"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_pescetarian"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_primal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_primal"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_paleo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_paleo"
+                        style="@style/CustomChipStyle" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_whole30"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_whole30"
-                    style="@style/CustomChipStyle"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_primal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_primal"
+                        style="@style/CustomChipStyle" />
 
-            </com.google.android.material.chip.ChipGroup>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_whole30"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_whole30"
+                        style="@style/CustomChipStyle" />
 
-        </LinearLayout>
+                </com.google.android.material.chip.ChipGroup>
 
-    </HorizontalScrollView>
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_apply"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginHorizontal="@dimen/basic24"
-        android:layout_marginVertical="@dimen/basic24"
-        android:text="@string/txt_apply"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/hsv_diet_type"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0" />
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/btn_apply"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="@dimen/basic24"
+            android:layout_marginVertical="@dimen/basic24"
+            android:text="@string/txt_apply"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/hsv_diet_type"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
