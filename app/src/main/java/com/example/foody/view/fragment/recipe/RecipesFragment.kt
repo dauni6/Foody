@@ -1,11 +1,10 @@
 package com.example.foody.view.fragment.recipe
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foody.R
 import com.example.foody.adapters.RecipesAdapter
 import com.example.foody.databinding.FragmentRecipesBinding
-import com.example.foody.util.Constants.Companion.API_KEY
 import com.example.foody.util.NetworkListener
 import com.example.foody.util.NetworkResult
 import com.example.foody.util.observeOnce
@@ -29,7 +27,7 @@ import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class RecipesFragment : Fragment() {
+class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val args by navArgs<RecipesFragmentArgs>()
 
@@ -60,6 +58,8 @@ class RecipesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setHasOptionsMenu(true)
 
         setupRecyclerView()
         startNetworkListener()
@@ -154,6 +154,36 @@ class RecipesFragment : Fragment() {
         }
     }
 
+    private fun searchAPIData(searchQuery: String) {
+        Timber.d("searchAPIData() -> searchQuery is $searchQuery")
+        showShimmerEffect()
+        val queryMap = recipesViewModel.applySearchQuery(searchQuery)
+        mainViewModel.searchRecipes(queryMap)
+        mainViewModel.searchRecipesResponse.observe(viewLifecycleOwner, { response ->
+            when(response) {
+                is NetworkResult.Success -> {
+                    Timber.d("searchAPIData() -> Success")
+                    hideShimmerEffect()
+                    val foodRecipe = response.data
+                    foodRecipe?.let { mAdapter.setData(it) }
+                }
+
+                is NetworkResult.Error -> {
+                    Timber.d("searchAPIData() -> Error")
+                    hideShimmerEffect()
+                    loadDataFromCache()
+                    Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
+                }
+
+                is NetworkResult.Loading -> {
+                    Timber.d("searchAPIData() -> Loading")
+
+                    showShimmerEffect()
+                }
+            }
+        })
+    }
+
 
     private fun showShimmerEffect() {
         binding.recyclerView.showShimmer() // 데이터가 로딩중임을 보이기 위해 Shimmer 사용
@@ -161,6 +191,29 @@ class RecipesFragment : Fragment() {
 
     private fun hideShimmerEffect() {
         binding.recyclerView.hideShimmer()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Timber.d("onCreateOptionsMenu is called.")
+        inflater.inflate(R.menu.recipes_menu, menu)
+        val search = menu.findItem(R.id.menu_search)
+        val searchView = search.actionView as? SearchView // 형변환이 안되면 null 리턴
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this@RecipesFragment)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        Timber.d("search query is $query")
+        if (query != null) {
+            Timber.d("search query2 is $query")
+            searchAPIData(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        Timber.d("onQueryTextChange() is called.")
+        return true
     }
 
     // Fragment는 View보다 더 오래 지속되므로 binding 객체를 반드시 onDestroyView()에서 해제해주어야 한다.

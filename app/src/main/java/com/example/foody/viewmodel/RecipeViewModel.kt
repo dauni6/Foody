@@ -17,10 +17,12 @@ import com.example.foody.util.Constants.Companion.QUERY_API_KEY
 import com.example.foody.util.Constants.Companion.QUERY_DIET
 import com.example.foody.util.Constants.Companion.QUERY_FILLING_INGREDIENTS
 import com.example.foody.util.Constants.Companion.QUERY_NUMBER
+import com.example.foody.util.Constants.Companion.QUERY_SEARCH
 import com.example.foody.util.Constants.Companion.QUERY_TYPE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class RecipeViewModel @ViewModelInject constructor(
     application: Application,
@@ -73,6 +75,17 @@ class RecipeViewModel @ViewModelInject constructor(
         queries[QUERY_API_KEY] = API_KEY
         queries[QUERY_TYPE] = mealType // 바로 위의 collect{..}를 통해 얻어진 mealType
         queries[QUERY_DIET] = dietType // 바로 위의 collect{..}를 통해 얻어진 dietType
+        queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
+        queries[QUERY_FILLING_INGREDIENTS] = "true"
+        return queries
+    }
+
+    fun applySearchQuery(searchQuery: String): HashMap<String, String> {
+        Timber.d("applySearchQuery() searchQuery is $searchQuery")
+        val queries: HashMap<String, String> = HashMap()
+        queries[QUERY_SEARCH] = searchQuery
+        queries[QUERY_NUMBER] = DEFAULT_RECIPES_NUMBER
+        queries[QUERY_API_KEY] = API_KEY
         queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
         queries[QUERY_FILLING_INGREDIENTS] = "true"
         return queries

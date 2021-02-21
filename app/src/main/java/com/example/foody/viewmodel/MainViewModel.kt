@@ -19,10 +19,11 @@ import timber.log.Timber
 class MainViewModel @ViewModelInject constructor(
     private val repository: Repository,
     application: Application
-): AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     /** ROOM DATABASE */
-    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readDatabase().asLiveData() // coroutine Flow를 LiveData로 바꾸기 위해서 asLiveData()를 사용
+    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readDatabase()
+        .asLiveData() // coroutine Flow를 LiveData로 바꾸기 위해서 asLiveData()를 사용
 
     private fun insertRecipes(recipesEntity: RecipesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -31,10 +32,17 @@ class MainViewModel @ViewModelInject constructor(
 
     /** RETROFIT */
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
+    var searchRecipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
 
-    fun getRecipes(queries: Map<String, String>) = viewModelScope.launch {
-        getRecipesSafeCall(queries)
-    }
+    fun getRecipes(queries: Map<String, String>) =
+        viewModelScope.launch {
+            getRecipesSafeCall(queries)
+        }
+
+    fun searchRecipes(searchQuery: Map<String, String>) =
+        viewModelScope.launch {
+            searchRecipesSafeCall(searchQuery)
+        }
 
     private suspend fun getRecipesSafeCall(queries: Map<String, String>) {
         recipesResponse.value = NetworkResult.Loading()
@@ -42,7 +50,7 @@ class MainViewModel @ViewModelInject constructor(
             try {
                 val response = repository.remote.getRecipes(queries)
                 recipesResponse.value = handleFoodRecipesResponse(response)
-                
+
                 // ROOM에 넣기
                 val foodRecipe = recipesResponse.value!!.data
                 foodRecipe?.let { offlineCacheRecipes(it) }
@@ -52,6 +60,20 @@ class MainViewModel @ViewModelInject constructor(
             }
         } else {
             recipesResponse.value = NetworkResult.Error(message = "No Internet Connection.")
+        }
+    }
+
+    private suspend fun searchRecipesSafeCall(searchQuery: Map<String, String>) {
+        searchRecipesResponse.value = NetworkResult.Loading()
+        if (hasInternetConnection()) {
+            try {
+                val response = repository.remote.searchRecipes(searchQuery)
+                searchRecipesResponse.value = handleFoodRecipesResponse(response)
+            } catch (e: Exception) {
+                searchRecipesResponse.value = NetworkResult.Error(message = "Recipes not found.")
+            }
+        } else {
+            searchRecipesResponse.value = NetworkResult.Error(message = "No Internet Connection.")
         }
     }
 
