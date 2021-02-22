@@ -13,7 +13,8 @@
         android:id="@+id/recipesRowLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/basic04">
+        android:layout_marginVertical="@dimen/basic04"
+        app:onRecipeClickListener="@{result}">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/row_cardView"

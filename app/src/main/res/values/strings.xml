@@ -32,4 +32,5 @@
     <string name="txt_whole30">Whole30</string>
     <string name="txt_apply">Apply</string>
     <string name="text_search">Search</string>
+    <string name="txt_detail_activity">Details</string>
 </resources>

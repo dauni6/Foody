@@ -1,16 +1,33 @@
 package com.example.foody.bindingadapter
 
-import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.navigation.findNavController
 import coil.load
 import com.example.foody.R
+import com.example.foody.model.Result
+import com.example.foody.view.fragment.recipe.RecipesFragmentDirections
 import timber.log.Timber
 
 object RecipesRowBinding {
+
+    @BindingAdapter("app:onRecipeClickListener")
+    @JvmStatic
+    fun onRecipeClickListener(recipeRowLayout: ConstraintLayout, result: Result) {
+        recipeRowLayout.setOnClickListener {
+            try {
+                val action =
+                    RecipesFragmentDirections.actionRecipesFragmentToDetailActivity(result)
+                recipeRowLayout.findNavController().navigate(action)
+            } catch (error: Exception) {
+                Timber.e("onRecipeClickListener / error : ${error.message.toString()}")
+            }
+        }
+    }
 
     @BindingAdapter("app:setNumberOfLikes")
     @JvmStatic
