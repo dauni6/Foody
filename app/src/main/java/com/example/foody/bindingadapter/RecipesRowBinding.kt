@@ -11,9 +11,19 @@ import coil.load
 import com.example.foody.R
 import com.example.foody.model.Result
 import com.example.foody.view.fragment.recipe.RecipesFragmentDirections
+import org.jsoup.Jsoup
 import timber.log.Timber
 
 object RecipesRowBinding {
+
+    @BindingAdapter("app:parseHtml")
+    @JvmStatic
+    fun parseHtml(textView: TextView, description: String?) {
+        if (description != null) {
+            val desc = Jsoup.parse(description).text()
+            textView.text = desc
+        }
+    }
 
     @BindingAdapter("app:onRecipeClickListener")
     @JvmStatic

@@ -33,4 +33,7 @@
     <string name="txt_apply">Apply</string>
     <string name="text_search">Search</string>
     <string name="txt_detail_activity">Details</string>
+    <string name="txt_diary_free">Diary Free</string>
+    <string name="txt_healthy">Healthy</string>
+    <string name="txt_cheap">Cheap</string>
 </resources>
