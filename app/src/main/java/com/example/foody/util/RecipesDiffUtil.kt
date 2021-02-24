@@ -3,9 +3,9 @@ package com.example.foody.util
 import androidx.recyclerview.widget.DiffUtil
 import com.example.foody.model.Result
 
-class RecipesDiffUtil(
-    private val oldList: List<Result>,
-    private val newList: List<Result>
+class RecipesDiffUtil<T>(
+    private val oldList: List<T>,
+    private val newList: List<T>
 ): DiffUtil.Callback() {
     // 변화하기전의 데이터셋 사이즈
     override fun getOldListSize(): Int  = oldList.size
@@ -13,7 +13,7 @@ class RecipesDiffUtil(
     // 변화 후 데이터셋 사이즈
     override fun getNewListSize(): Int = newList.size
 
-    // 두 객체가 같은 항목인지 여부를 결정정
+    // 두 객체가 같은 항목인지 여부를 결정
    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition] === newList[newItemPosition]
     }

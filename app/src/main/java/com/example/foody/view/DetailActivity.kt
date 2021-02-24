@@ -10,6 +10,7 @@ import androidx.navigation.navArgs
 import com.example.foody.R
 import com.example.foody.adapters.PagerAdapter
 import com.example.foody.databinding.ActivityDetailBinding
+import com.example.foody.util.Constants.Companion.RECIPE_RESULT
 import com.example.foody.view.fragment.ingredients.IngredientsFragment
 import com.example.foody.view.fragment.instruction.InstructionFragment
 import com.example.foody.view.fragment.overview.OverviewFragment
@@ -40,7 +41,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun createResultBundle(): Bundle {
         return Bundle().apply {
-            this.putParcelable("recipeBundle", args.result)
+            this.putParcelable(RECIPE_RESULT, args.result)
         }
     }
 

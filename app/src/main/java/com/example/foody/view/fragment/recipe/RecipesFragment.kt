@@ -194,7 +194,6 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Timber.d("onCreateOptionsMenu is called.")
         inflater.inflate(R.menu.recipes_menu, menu)
         val search = menu.findItem(R.id.menu_search)
         val searchView = search.actionView as? SearchView // 형변환이 안되면 null 리턴
@@ -203,16 +202,13 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        Timber.d("search query is $query")
         if (query != null) {
-            Timber.d("search query2 is $query")
             searchAPIData(query)
         }
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        Timber.d("onQueryTextChange() is called.")
         return true
     }
 

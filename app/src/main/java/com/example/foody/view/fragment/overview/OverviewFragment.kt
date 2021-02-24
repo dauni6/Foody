@@ -11,21 +11,21 @@ import coil.load
 import com.example.foody.R
 import com.example.foody.databinding.FragmentOverviewBinding
 import com.example.foody.model.Result
+import com.example.foody.util.Constants.Companion.RECIPE_RESULT
 import kotlinx.android.synthetic.main.fragment_overview.view.*
 import org.jsoup.Jsoup
 import timber.log.Timber
 
 class OverviewFragment : Fragment() {
 
-    private lateinit var binding: FragmentOverviewBinding
+    private var _binding: FragmentOverviewBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_overview, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_overview, container, false)
         return binding.root
     }
 
@@ -38,7 +38,9 @@ class OverviewFragment : Fragment() {
 
     private fun initData() {
         val args = arguments
-        val myBundle: Result? = args?.getParcelable("recipeBundle")
+        val myBundle: Result? = args?.getParcelable(RECIPE_RESULT)
+
+        Timber.d("size = ${myBundle?.extendedIngredients?.size}")
 
         binding.ivMain.load(myBundle?.image)
         binding.tvTitle.text = myBundle?.title
@@ -80,6 +82,11 @@ class OverviewFragment : Fragment() {
             binding.tvCheap.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
