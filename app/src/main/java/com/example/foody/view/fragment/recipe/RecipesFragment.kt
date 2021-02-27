@@ -107,7 +107,6 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         lifecycleScope.launch {
             mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, { database ->
                 if (database.isNotEmpty() && !args.backFromBottomSheet) {
-                    Timber.d("RecipeFragment / readDatabase() is called")
                     mAdapter.setData(database[0].foodRecipe) // 첫 번째 레시피 가져오기
                     hideShimmerEffect()
                 } else {
@@ -118,7 +117,6 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun requestApiData() {
-        Timber.d("RecipeFragment / requestApiData() is called")
         mainViewModel.getRecipes(recipesViewModel.applyQueries())
         mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
             when (response) {

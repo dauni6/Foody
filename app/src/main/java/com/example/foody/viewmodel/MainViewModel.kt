@@ -10,6 +10,7 @@ import androidx.lifecycle.*
 import com.example.foody.data.Repository
 import com.example.foody.data.database.RecipesEntity
 import com.example.foody.model.FoodRecipe
+import com.example.foody.util.Constants.Companion.QUERY_FILL_INGREDIENTS
 import com.example.foody.util.NetworkResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +54,9 @@ class MainViewModel @ViewModelInject constructor(
 
                 // ROOM에 넣기
                 val foodRecipe = recipesResponse.value!!.data
-                foodRecipe?.let { offlineCacheRecipes(it) }
+                foodRecipe?.let {
+                    offlineCacheRecipes(it)
+                }
 
             } catch (e: Exception) {
                 recipesResponse.value = NetworkResult.Error(message = "Recipes not found.")

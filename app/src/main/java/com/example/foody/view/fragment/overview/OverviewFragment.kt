@@ -11,10 +11,9 @@ import coil.load
 import com.example.foody.R
 import com.example.foody.databinding.FragmentOverviewBinding
 import com.example.foody.model.Result
-import com.example.foody.util.Constants.Companion.RECIPE_RESULT
+import com.example.foody.util.Constants.Companion.RECIPE_RESULT_KEY
 import kotlinx.android.synthetic.main.fragment_overview.view.*
 import org.jsoup.Jsoup
-import timber.log.Timber
 
 class OverviewFragment : Fragment() {
 
@@ -38,9 +37,7 @@ class OverviewFragment : Fragment() {
 
     private fun initData() {
         val args = arguments
-        val myBundle: Result? = args?.getParcelable(RECIPE_RESULT)
-
-        Timber.d("size = ${myBundle?.extendedIngredients?.size}")
+        val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
 
         binding.ivMain.load(myBundle?.image)
         binding.tvTitle.text = myBundle?.title

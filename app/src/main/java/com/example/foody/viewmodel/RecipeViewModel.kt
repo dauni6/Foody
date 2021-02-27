@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.foody.data.DataStoreRepository
-import com.example.foody.util.Constants
 import com.example.foody.util.Constants.Companion.API_KEY
 import com.example.foody.util.Constants.Companion.DEFAULT_DIET_TYPE
 import com.example.foody.util.Constants.Companion.DEFAULT_MEAL_TYPE
@@ -15,14 +14,13 @@ import com.example.foody.util.Constants.Companion.DEFAULT_RECIPES_NUMBER
 import com.example.foody.util.Constants.Companion.QUERY_ADD_RECIPE_INFORMATION
 import com.example.foody.util.Constants.Companion.QUERY_API_KEY
 import com.example.foody.util.Constants.Companion.QUERY_DIET
-import com.example.foody.util.Constants.Companion.QUERY_FILLING_INGREDIENTS
+import com.example.foody.util.Constants.Companion.QUERY_FILL_INGREDIENTS
 import com.example.foody.util.Constants.Companion.QUERY_NUMBER
 import com.example.foody.util.Constants.Companion.QUERY_SEARCH
 import com.example.foody.util.Constants.Companion.QUERY_TYPE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class RecipeViewModel @ViewModelInject constructor(
     application: Application,
@@ -44,7 +42,7 @@ class RecipeViewModel @ViewModelInject constructor(
             dataStoreRepository.saveMealAndDietType(mealType, mealTypeId, dietType, dietTypeId)
         }
 
-    fun saveBackOnline(backOnline: Boolean) =
+    private fun saveBackOnline(backOnline: Boolean) =
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreRepository.saveBackOnline(backOnline)
         }
@@ -76,18 +74,17 @@ class RecipeViewModel @ViewModelInject constructor(
         queries[QUERY_TYPE] = mealType // 바로 위의 collect{..}를 통해 얻어진 mealType
         queries[QUERY_DIET] = dietType // 바로 위의 collect{..}를 통해 얻어진 dietType
         queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
-        queries[QUERY_FILLING_INGREDIENTS] = "true"
+        queries[QUERY_FILL_INGREDIENTS] = "true"
         return queries
     }
 
     fun applySearchQuery(searchQuery: String): HashMap<String, String> {
-        Timber.d("applySearchQuery() searchQuery is $searchQuery")
         val queries: HashMap<String, String> = HashMap()
         queries[QUERY_SEARCH] = searchQuery
         queries[QUERY_NUMBER] = DEFAULT_RECIPES_NUMBER
         queries[QUERY_API_KEY] = API_KEY
         queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
-        queries[QUERY_FILLING_INGREDIENTS] = "true"
+        queries[QUERY_FILL_INGREDIENTS] = "true"
         return queries
     }
 

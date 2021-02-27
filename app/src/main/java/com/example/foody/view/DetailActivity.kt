@@ -10,7 +10,7 @@ import androidx.navigation.navArgs
 import com.example.foody.R
 import com.example.foody.adapters.PagerAdapter
 import com.example.foody.databinding.ActivityDetailBinding
-import com.example.foody.util.Constants.Companion.RECIPE_RESULT
+import com.example.foody.util.Constants.Companion.RECIPE_RESULT_KEY
 import com.example.foody.view.fragment.ingredients.IngredientsFragment
 import com.example.foody.view.fragment.instruction.InstructionFragment
 import com.example.foody.view.fragment.overview.OverviewFragment
@@ -40,9 +40,9 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun createResultBundle(): Bundle {
-        return Bundle().apply {
-            this.putParcelable(RECIPE_RESULT, args.result)
-        }
+        val bundle = Bundle()
+        bundle.putParcelable(RECIPE_RESULT_KEY, args.result)
+        return bundle
     }
 
     private fun createFragmentsList(): ArrayList<Fragment> {
@@ -73,8 +73,8 @@ class DetailActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Timber.d("onOptionsItemSelected / home = ${android.R.id.home}")
-        Timber.d("onOptionsItemSelected / itemId = ${item.itemId}")
+//        Timber.d("onOptionsItemSelected / home = ${android.R.id.home}")
+//        Timber.d("onOptionsItemSelected / itemId = ${item.itemId}")
         if (item.itemId == android.R.id.home) {
             finish()
         }
