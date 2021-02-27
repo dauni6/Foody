@@ -37,6 +37,7 @@ class IngredientsFragment : Fragment() {
     }
 
     private fun initData() {
+        // 해당 arguments는 PagerAdapter 클래스에서 각 프래그먼트에 뿌려줌
         val args = arguments
         val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
         Timber.d("likes = ${myBundle?.aggregateLikes}")
