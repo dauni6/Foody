@@ -16,10 +16,10 @@ import timber.log.Timber
 
 class IngredientsFragment : Fragment() {
 
-    private val mAdapter: IngredientsAdapter by lazy { IngredientsAdapter() }
-
     private var _binding: FragmentIngredientsBinding? = null
     private val binding get() = _binding!!
+
+    private val mAdapter: IngredientsAdapter by lazy { IngredientsAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +36,13 @@ class IngredientsFragment : Fragment() {
         initData()
     }
 
+    private fun setupRecyclerView() {
+        binding.rvIngredients.apply {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }
+    }
+
     private fun initData() {
         // 해당 arguments는 PagerAdapter 클래스에서 각 프래그먼트에 뿌려줌
         val args = arguments
@@ -43,13 +50,6 @@ class IngredientsFragment : Fragment() {
         Timber.d("likes = ${myBundle?.aggregateLikes}")
         myBundle?.extendedIngredients?.let {
             mAdapter.setData(it)
-        }
-    }
-
-    private fun setupRecyclerView() {
-        binding.rvIngredients.apply {
-            adapter = mAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
     }
 

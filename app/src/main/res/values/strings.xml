@@ -36,4 +36,9 @@
     <string name="txt_diary_free">Diary Free</string>
     <string name="txt_healthy">Healthy</string>
     <string name="txt_cheap">Cheap</string>
+    <string name="txt_save_to_favrorites">Save to Favorites</string>
+    <string name="txt_favorite_okay">Okay</string>
+    <string name="txt_recipe_saved">Recipe saved.</string>
+    <string name="txt_favorite_removed">Removed from Favorite.</string>
+    <string name="txt_no_saved_favorite_data">No Favorite Recipes.</string>
 </resources>

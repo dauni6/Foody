@@ -34,7 +34,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() 
     class RecipesViewHolder(private val binding: RecipesRowLayoutBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(result: Result) {
-            binding.result = result
+            binding.result = result // databinding의 variable에 result 넣기
             binding.executePendingBindings()
         }
 

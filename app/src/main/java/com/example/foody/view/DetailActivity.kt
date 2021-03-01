@@ -2,29 +2,41 @@ package com.example.foody.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.navArgs
 import com.example.foody.R
 import com.example.foody.adapters.PagerAdapter
+import com.example.foody.data.database.entities.FavoritesEntity
 import com.example.foody.databinding.ActivityDetailBinding
 import com.example.foody.util.Constants.Companion.RECIPE_RESULT_KEY
 import com.example.foody.view.fragment.ingredients.IngredientsFragment
 import com.example.foody.view.fragment.instruction.InstructionFragment
 import com.example.foody.view.fragment.overview.OverviewFragment
+import com.example.foody.viewmodel.MainViewModel
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
     private val args by navArgs<DetailActivityArgs>()
+    private val mainViewModel: MainViewModel by viewModels()
 
-    private lateinit var binding: ActivityDetailBinding
+    private var _binding: ActivityDetailBinding? = null
+    private val binding get() = _binding!!
+
+    private var recipeSaved = false
+    private var savedRecipeId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this@DetailActivity, R.layout.activity_detail)
+        _binding = DataBindingUtil.setContentView(this@DetailActivity, R.layout.activity_detail)
 
         setActionBar()
 
@@ -72,13 +84,97 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    // Favorite star button
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        Timber.d("onCreateOptionsMenu() is called.")
+        menuInflater.inflate(R.menu.details_menu, menu)
+        checkSavedRecipes(menu)
+        return true
+    }
+
+    private fun checkSavedRecipes(menu: Menu?) {
+        val menuItem = menu?.findItem(R.id.save_to_favorites_menu)
+        mainViewModel.readFavoriteRecipes.observe(this, { favoritesEntity ->
+            try {
+                for (savedRecipe in favoritesEntity) {
+                    if (savedRecipe.result.recipeId == args.result.recipeId) {
+                        Timber.d("저장된 id = ${savedRecipe.result.recipeId}")
+                        Timber.d("클릭된 id = ${args.result.recipeId}")
+                        changeMenuItemColor(menuItem!!, R.color.yellow)
+                        savedRecipeId = savedRecipe.id
+                        break
+                    } else {
+                        Timber.d("DB에 없음.")
+                        changeMenuItemColor(menuItem!!, R.color.white)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        })
+    }
+
+    // UP BUTTON
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // 어떻게 home을하면 MainActivity를 알아서 뒤로가기가 되는지 궁금하여 밑에 로그로 확인하려함.
 //        Timber.d("onOptionsItemSelected / home = ${android.R.id.home}")
 //        Timber.d("onOptionsItemSelected / itemId = ${item.itemId}")
-        if (item.itemId == android.R.id.home) {
+
+        val HOME = android.R.id.home
+        val SAVE_TO_FAVORITES_MENU = R.id.save_to_favorites_menu
+
+        if (item.itemId == HOME) {
             finish()
+        } else if (item.itemId == SAVE_TO_FAVORITES_MENU && !recipeSaved) {
+            Timber.d("저장")
+            saveToFavorite()
+            changeMenuItemColor(item, R.color.yellow)
+            showSnackBar(getString(R.string.txt_recipe_saved))
+        } else if (item.itemId == SAVE_TO_FAVORITES_MENU && recipeSaved) {
+            Timber.d("삭제")
+            deleteFromFavorite()
+            changeMenuItemColor(item, R.color.white)
+            showSnackBar(getString(R.string.txt_favorite_removed))
         }
+
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(
+            binding.detailLayout,
+            message,
+            Snackbar.LENGTH_SHORT
+        ).setAction(getString(R.string.txt_favorite_okay)){}.show()
+    }
+
+    private fun changeMenuItemColor(item: MenuItem, color: Int) {
+        item.icon.setTint(ContextCompat.getColor(this, color))
+    }
+
+    private fun saveToFavorite() {
+        val favoritesEntity =
+            FavoritesEntity(
+                0,
+                args.result
+            )
+        mainViewModel.insertFavoriteRecipe(favoritesEntity)
+        recipeSaved = true
+    }
+
+    private fun deleteFromFavorite() {
+        val favoritesEntity =
+            FavoritesEntity(
+                savedRecipeId,
+                args.result
+            )
+        mainViewModel.deleteFavoriteRecipe(favoritesEntity)
+        recipeSaved = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }
