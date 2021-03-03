@@ -86,7 +86,6 @@ class DetailActivity : AppCompatActivity() {
 
     // Favorite star button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        Timber.d("onCreateOptionsMenu() is called.")
         menuInflater.inflate(R.menu.details_menu, menu)
         checkSavedRecipes(menu)
         return true
@@ -98,13 +97,11 @@ class DetailActivity : AppCompatActivity() {
             try {
                 for (savedRecipe in favoritesEntity) {
                     if (savedRecipe.result.recipeId == args.result.recipeId) {
-                        Timber.d("저장된 id = ${savedRecipe.result.recipeId}")
-                        Timber.d("클릭된 id = ${args.result.recipeId}")
-                        changeMenuItemColor(menuItem!!, R.color.yellow)
                         savedRecipeId = savedRecipe.id
+                        recipeSaved = true
+                        changeMenuItemColor(menuItem!!, R.color.yellow)
                         break
                     } else {
-                        Timber.d("DB에 없음.")
                         changeMenuItemColor(menuItem!!, R.color.white)
                     }
                 }
@@ -114,7 +111,6 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
-    // UP BUTTON
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // 어떻게 home을하면 MainActivity를 알아서 뒤로가기가 되는지 궁금하여 밑에 로그로 확인하려함.
 //        Timber.d("onOptionsItemSelected / home = ${android.R.id.home}")
@@ -126,12 +122,10 @@ class DetailActivity : AppCompatActivity() {
         if (item.itemId == HOME) {
             finish()
         } else if (item.itemId == SAVE_TO_FAVORITES_MENU && !recipeSaved) {
-            Timber.d("저장")
             saveToFavorite()
             changeMenuItemColor(item, R.color.yellow)
             showSnackBar(getString(R.string.txt_recipe_saved))
         } else if (item.itemId == SAVE_TO_FAVORITES_MENU && recipeSaved) {
-            Timber.d("삭제")
             deleteFromFavorite()
             changeMenuItemColor(item, R.color.white)
             showSnackBar(getString(R.string.txt_favorite_removed))
@@ -159,7 +153,6 @@ class DetailActivity : AppCompatActivity() {
                 args.result
             )
         mainViewModel.insertFavoriteRecipe(favoritesEntity)
-        recipeSaved = true
     }
 
     private fun deleteFromFavorite() {
