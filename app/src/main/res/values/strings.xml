@@ -42,4 +42,5 @@
     <string name="txt_favorite_removed">Removed from Favorite.</string>
     <string name="txt_no_saved_favorite_data">No Favorite Recipes.</string>
     <string name="txt_delete_favorite">Delete Favorite Menu</string>
+    <string name="txt_delete_all">Delete All</string>
 </resources>

@@ -12,12 +12,25 @@ import com.example.foody.databinding.FavoriteRecipesRowLayoutBinding
 import com.example.foody.model.Result
 import com.example.foody.util.RecipesDiffUtil
 import com.example.foody.view.fragment.favorite.FavoriteRecipesFragmentDirections
+import com.example.foody.viewmodel.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class FavoriteRecipesAdapter(
-    private val requireActivity: FragmentActivity
+    private val requireActivity: FragmentActivity,
+    private val mainViewModel: MainViewModel
 ) : RecyclerView.Adapter<FavoriteRecipesAdapter.FavoriteViewHolder>(), ActionMode.Callback {
 
+    private var multiSelection = false
+
+    private lateinit var mActionMode : ActionMode
+    private lateinit var rootView: View
+
+    // 선택한 레서피를 삭제하기 위한 ArrayList
+    private var selectedRecipes = arrayListOf<FavoritesEntity>()
+
     private var favoriteRecipes = emptyList<FavoritesEntity>()
+
+    private var viewHolders = arrayListOf<FavoriteViewHolder>()
 
     override fun getItemCount(): Int = favoriteRecipes.size
 
@@ -25,9 +38,78 @@ class FavoriteRecipesAdapter(
         FavoriteViewHolder.from(parent)
 
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
-        holder.bind(favoriteRecipes[position])
-        holder.singleClickListenerForActionDetailActivity(favoriteRecipes[position].result)
-        holder.longClickListener(requireActivity, this)
+        viewHolders.add(holder)
+        rootView = holder.binding.root
+
+        val currentRecipe = favoriteRecipes[position]
+        holder.bind(currentRecipe)
+
+        /**
+         * Single Click Listener
+         * */
+        holder.binding.clFavoriteRecipeRow.setOnClickListener {
+            if (multiSelection) {
+                applySelection(holder, currentRecipe)
+            } else {
+                val action =
+                    FavoriteRecipesFragmentDirections.actionFavoriteRecipesFragmentToDetailActivity(
+                        favoriteRecipes[position].result
+                    )
+                holder.binding.root.findNavController().navigate(action)
+            }
+        }
+
+        /**
+         * Long Click Listener
+         * */
+        holder.binding.clFavoriteRecipeRow.setOnLongClickListener {
+            if (!multiSelection) {
+                multiSelection = true
+                requireActivity.startActionMode(this)
+                applySelection(holder, currentRecipe)
+                true
+            } else {
+                multiSelection = false
+                false
+            }
+        }
+    }
+
+    private fun applySelection(holder: FavoriteViewHolder, currentRecipe: FavoritesEntity) {
+        if (selectedRecipes.contains(currentRecipe)) {
+            selectedRecipes.remove(currentRecipe)
+            changeRecipeStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
+            applyActionModeTitle()
+        } else {
+            selectedRecipes.add(currentRecipe)
+            changeRecipeStyle(holder, R.color.cardBackgroundLightColor, R.color.colorPrimary)
+            applyActionModeTitle()
+        }
+    }
+
+    private fun changeRecipeStyle(holder: FavoriteViewHolder, backgroundColor: Int, strokeColor: Int) {
+        holder.binding.clFavoriteRecipeRow.setBackgroundColor(
+            ContextCompat.getColor(requireActivity, backgroundColor)
+        )
+        holder.binding.cvFavoriteRow.strokeColor =
+            ContextCompat.getColor(requireActivity, strokeColor)
+    }
+
+    /**
+     * @applySelection()에서 눌려져서 배열에 추가,제거될 때마다 호출 됨.
+     * */
+    private fun applyActionModeTitle() {
+        when(selectedRecipes.size) {
+            0 -> {
+                mActionMode.finish()
+            }
+            1 -> {
+                mActionMode.title = "${selectedRecipes.size} item selected"
+            }
+            else -> {
+                mActionMode.title = "${selectedRecipes.size} items selected"
+            }
+        }
     }
 
     private fun applyStatusBarColor(color: Int) {
@@ -45,6 +127,7 @@ class FavoriteRecipesAdapter(
 
     override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
         actionMode?.menuInflater?.inflate(R.menu.favorite_contextual_menu, menu)
+        mActionMode = actionMode!!
         applyStatusBarColor(R.color.contextualStatusBarColor)
         return true
     }
@@ -53,36 +136,52 @@ class FavoriteRecipesAdapter(
         return true
     }
 
-    override fun onActionItemClicked(actionMode: ActionMode?, item: MenuItem?): Boolean {
+    override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
+        if (menu?.itemId == R.id.delete_favorite_recipe_menu) {
+            selectedRecipes.forEach {
+                mainViewModel.deleteFavoriteRecipe(it)
+            }
+            showSnackBar("${selectedRecipes.size} Recipe/s removed.")
+
+            multiSelection = false
+            selectedRecipes.clear()
+            actionMode?.finish()
+        }
         return true
     }
 
     override fun onDestroyActionMode(actionMode: ActionMode?) {
+        viewHolders.forEach { holder ->
+            changeRecipeStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
+        }
+        multiSelection = false
+        selectedRecipes.clear()
         applyStatusBarColor(R.color.statusBarColor)
     }
 
-    class FavoriteViewHolder(private val binding: FavoriteRecipesRowLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    private fun showSnackBar(message: String) {
+        Snackbar.make(
+            rootView,
+            message,
+            Snackbar.LENGTH_SHORT
+        ).setAction("Okay"){}
+            .show()
+    }
+
+    fun clearContextualActionMode() {
+        if(this::mActionMode.isInitialized) {
+            mActionMode.finish()
+        }
+    }
+
+    class FavoriteViewHolder(val binding: FavoriteRecipesRowLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        private var currentFavoriteEntity: FavoritesEntity? = null
 
         fun bind(favoritesEntity: FavoritesEntity) {
+            this.currentFavoriteEntity = favoritesEntity
             binding.favoritesEntity = favoritesEntity // databinding의 variable에 favoritesEntity 넣기
             binding.executePendingBindings()
-        }
-
-        fun singleClickListenerForActionDetailActivity(result: Result) {
-            binding.clFavoriteRecipeRow.setOnClickListener {
-                val action =
-                    FavoriteRecipesFragmentDirections.actionFavoriteRecipesFragmentToDetailActivity(
-                        result
-                    )
-                binding.root.findNavController().navigate(action)
-            }
-        }
-
-        fun longClickListener(requireActivity: FragmentActivity, favoriteRecipesAdapter: FavoriteRecipesAdapter) {
-            binding.clFavoriteRecipeRow.setOnLongClickListener {
-                requireActivity.startActionMode(favoriteRecipesAdapter)
-                true
-            }
         }
 
         companion object {
