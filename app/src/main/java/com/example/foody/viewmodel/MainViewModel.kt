@@ -8,7 +8,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.foody.data.Repository
 import com.example.foody.data.database.entities.FavoritesEntity
+import com.example.foody.data.database.entities.FoodJokeEntity
 import com.example.foody.data.database.entities.RecipesEntity
+import com.example.foody.model.FoodJoke
 import com.example.foody.model.FoodRecipe
 import com.example.foody.util.NetworkResult
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +29,9 @@ class MainViewModel @ViewModelInject constructor(
     val readFavoriteRecipes: LiveData<List<FavoritesEntity>> = repository.local.readFavoriteRecipes()
         .asLiveData()
 
+    val readFoodJoke: LiveData<List<FoodJokeEntity>> = repository.local.readFoodJoke()
+        .asLiveData()
+
 
     private fun insertRecipes(recipesEntity: RecipesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -36,6 +41,11 @@ class MainViewModel @ViewModelInject constructor(
     fun insertFavoriteRecipe(favoritesEntity: FavoritesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
             repository.local.insertFavoritesRecipe(favoritesEntity)
+        }
+
+    private fun insertFoodJoke(foodJokeEntity: FoodJokeEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertFoodJoke(foodJokeEntity)
         }
 
     fun deleteFavoriteRecipe(favoritesEntity: FavoritesEntity) =
@@ -51,6 +61,7 @@ class MainViewModel @ViewModelInject constructor(
     /** RETROFIT */
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
     var searchRecipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
+    var foodJokeResponse: MutableLiveData<NetworkResult<FoodJoke>> = MutableLiveData()
 
     fun getRecipes(queries: Map<String, String>) =
         viewModelScope.launch {
@@ -60,6 +71,11 @@ class MainViewModel @ViewModelInject constructor(
     fun searchRecipes(searchQuery: Map<String, String>) =
         viewModelScope.launch {
             searchRecipesSafeCall(searchQuery)
+        }
+
+    fun getFoodJoke(apiKey: String) =
+        viewModelScope.launch {
+            getFoodJokeSafeCall(apiKey)
         }
 
     private suspend fun getRecipesSafeCall(queries: Map<String, String>) {
@@ -97,9 +113,33 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
+    private suspend fun getFoodJokeSafeCall(apiKey: String) {
+        foodJokeResponse.value = NetworkResult.Loading()
+        if (hasInternetConnection()) {
+            try {
+                val response = repository.remote.getFoodJoke(apiKey)
+                foodJokeResponse.value = handleFoodJokeResponse(response)
+
+                val foodJoke = foodJokeResponse.value!!.data
+                if (foodJoke != null) {
+                    offlineCacheFoodJoke(foodJoke)
+                }
+            } catch (e: Exception) {
+                foodJokeResponse.value = NetworkResult.Error(message = "Joke not found.")
+            }
+        } else {
+            foodJokeResponse.value = NetworkResult.Error(message = "No Internet Connection.")
+        }
+    }
+
     private fun offlineCacheRecipes(foodRecipe: FoodRecipe) {
         val recipesEntity = RecipesEntity(foodRecipe)
         insertRecipes(recipesEntity)
+    }
+
+    private fun offlineCacheFoodJoke(foodJoke: FoodJoke) {
+        val foodJokeEntity = FoodJokeEntity(foodJoke)
+        insertFoodJoke(foodJokeEntity)
     }
 
     private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>? {
@@ -119,6 +159,24 @@ class MainViewModel @ViewModelInject constructor(
             }
             else -> {
                 return NetworkResult.Error(message = response.message())
+            }
+        }
+    }
+
+    private fun handleFoodJokeResponse(response: Response<FoodJoke>): NetworkResult<FoodJoke>? {
+        return when {
+            response.message().toString().contains("timeout") -> {
+                NetworkResult.Error(message = "Timeout")
+            }
+            response.code() == 402 -> { // 402 error = payment required.
+                NetworkResult.Error(message = "API ket Limited.")
+            }
+            response.isSuccessful -> {
+                val foodJoke = response.body()
+                NetworkResult.Success(foodJoke!!) // 위의 body를 처리하는 부분에 걸리지 않았다면 이곳이 실행되므로 non-null 마크(!!)를 사용할 수 있음
+            }
+            else -> {
+                NetworkResult.Error(message = response.message())
             }
         }
     }
