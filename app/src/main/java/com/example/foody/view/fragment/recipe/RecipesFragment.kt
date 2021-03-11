@@ -105,7 +105,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, { database ->
+            mainViewModel.readRecipes.observeOnce(this@RecipesFragment, { database -> // lifecycleOwner를 viewLifecycleOwner로 했다가 FragmentJoke에서 와이파이를 끄면 앱이 터져서 lifeCycleOwner를 RecipesFragment로 바꿨다.
                 if (database.isNotEmpty() && !args.backFromBottomSheet) {
                     mAdapter.setData(database[0].foodRecipe) // 첫 번째 레시피 가져오기
                     hideShimmerEffect()
