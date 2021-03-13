@@ -11,12 +11,14 @@
         android:id="@+id/detailLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
         tools:context=".view.DetailActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/abl_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@color/actionbarBackgroundColor"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
