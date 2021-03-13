@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_Foody) // 여기서 theme을 바꿔주고 manifest에서는 splash theme으로 설정해줌
         setContentView(R.layout.activity_main)
 
         val navController = findNavController(R.id.nav_host_fragment)
