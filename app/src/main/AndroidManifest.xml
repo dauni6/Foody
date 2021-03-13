@@ -19,10 +19,12 @@
         android:largeHeap="true">
         <activity android:name=".view.DetailActivity"
             android:theme="@style/DetailActivityStyle"
-            android:label="@string/txt_detail_activity">
+            android:label="@string/txt_detail_activity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
