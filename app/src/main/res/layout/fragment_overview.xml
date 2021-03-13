@@ -7,9 +7,12 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
+        app:layoutDescription="@xml/fragment_overview_xml_constraintlayout_scene"
         tools:context=".view.fragment.overview.OverviewFragment">
 
 
@@ -17,14 +20,14 @@
             android:id="@+id/iv_main"
             android:layout_width="0dp"
             android:layout_height="250dp"
+            android:contentDescription="@null"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0"
-            tools:src="@tools:sample/avatars"
-            android:contentDescription="@null" />
+            tools:src="@tools:sample/avatars" />
 
         <View
             android:id="@+id/view_gradient_overlay"
@@ -56,12 +59,12 @@
             android:id="@+id/iv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@null"
             android:src="@drawable/ic_clock"
             app:layout_constraintBottom_toTopOf="@id/tv_time"
             app:layout_constraintEnd_toEndOf="@id/tv_time"
             app:layout_constraintStart_toStartOf="@id/tv_time"
-            app:tint="@color/white"
-            android:contentDescription="@null" />
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/tv_likes"
@@ -78,14 +81,15 @@
             tools:text="100" />
 
         <ImageView
+            android:id="@+id/iv_likes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@null"
             android:src="@drawable/ic_heart"
             app:layout_constraintBottom_toTopOf="@id/tv_likes"
             app:layout_constraintEnd_toEndOf="@id/tv_likes"
             app:layout_constraintStart_toStartOf="@id/tv_likes"
-            app:tint="@color/white"
-            android:contentDescription="@null" />
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -107,11 +111,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/basic12"
+            android:contentDescription="@null"
             android:src="@drawable/ic_checkmark"
             app:layout_constraintStart_toStartOf="@id/tv_title"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
-            app:tint="@color/itemColor"
-            android:contentDescription="@null" />
+            app:tint="@color/itemColor" />
 
         <TextView
             android:id="@+id/tv_vegetarian"
@@ -129,11 +133,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/basic12"
+            android:contentDescription="@null"
             android:src="@drawable/ic_checkmark"
             app:layout_constraintStart_toStartOf="@id/iv_vegetarian"
             app:layout_constraintTop_toBottomOf="@id/iv_vegetarian"
-            app:tint="@color/itemColor"
-            android:contentDescription="@null" />
+            app:tint="@color/itemColor" />
 
         <TextView
             android:id="@+id/tv_vegan"
@@ -151,12 +155,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/basic24"
+            android:contentDescription="@null"
             android:src="@drawable/ic_checkmark"
             app:layout_constraintBottom_toBottomOf="@+id/tv_vegetarian"
             app:layout_constraintStart_toEndOf="@+id/tv_vegetarian"
             app:layout_constraintTop_toTopOf="@+id/tv_vegetarian"
-            app:tint="@color/itemColor"
-            android:contentDescription="@null" />
+            app:tint="@color/itemColor" />
 
         <TextView
             android:id="@+id/tv_diary_free"
@@ -174,11 +178,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/basic12"
+            android:contentDescription="@null"
             android:src="@drawable/ic_checkmark"
             app:layout_constraintStart_toStartOf="@+id/iv_diary_free"
             app:layout_constraintTop_toBottomOf="@+id/iv_diary_free"
-            app:tint="@color/itemColor"
-            android:contentDescription="@null" />
+            app:tint="@color/itemColor" />
 
         <TextView
             android:id="@+id/tv_gluten_free"
@@ -196,12 +200,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/basic24"
+            android:contentDescription="@null"
             android:src="@drawable/ic_checkmark"
             app:layout_constraintBottom_toBottomOf="@+id/tv_diary_free"
             app:layout_constraintStart_toEndOf="@+id/tv_diary_free"
             app:layout_constraintTop_toTopOf="@+id/tv_diary_free"
-            app:tint="@color/itemColor"
-            android:contentDescription="@null" />
+            app:tint="@color/itemColor" />
 
         <TextView
             android:id="@+id/tv_healthy"
@@ -219,12 +223,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/basic12"
+            android:contentDescription="@null"
             android:src="@drawable/ic_checkmark"
             app:layout_constraintEnd_toEndOf="@+id/iv_healthy"
             app:layout_constraintStart_toStartOf="@+id/iv_healthy"
             app:layout_constraintTop_toBottomOf="@+id/iv_healthy"
-            app:tint="@color/itemColor"
-            android:contentDescription="@null" />
+            app:tint="@color/itemColor" />
 
         <TextView
             android:id="@+id/tv_cheap"
@@ -238,10 +242,11 @@
             app:layout_constraintTop_toTopOf="@+id/iv_cheap" />
 
         <ScrollView
+            android:id="@+id/scrollView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/basic12"
             android:layout_marginHorizontal="@dimen/basic12"
+            android:layout_marginTop="@dimen/basic12"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -264,5 +269,5 @@
         </ScrollView>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
