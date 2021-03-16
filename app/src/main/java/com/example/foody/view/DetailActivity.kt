@@ -19,6 +19,7 @@ import com.example.foody.view.fragment.instruction.InstructionFragment
 import com.example.foody.view.fragment.overview.OverviewFragment
 import com.example.foody.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -40,14 +41,17 @@ class DetailActivity : AppCompatActivity() {
 
         setActionBar()
 
-        binding.viewPager.adapter = PagerAdapter(
-            createResultBundle(),
-            createFragmentsList(),
-            createTitlesList(),
-            supportFragmentManager
-        )
+        binding.viewPager2.apply {
+            adapter = PagerAdapter(
+                createResultBundle(),
+                createFragmentsList(),
+                this@DetailActivity
+            )
+        }
 
-        binding.tabLayout.setupWithViewPager(binding.viewPager)
+        TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->
+            tab.text = createTitlesList()[position]
+        }.attach()
 
     }
 

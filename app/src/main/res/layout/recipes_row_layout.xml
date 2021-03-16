@@ -102,12 +102,12 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textColor="@color/red"
+                    android:text="@{String.valueOf(result.aggregateLikes)}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/iv_heart"
                     app:layout_constraintStart_toStartOf="@id/iv_heart"
                     app:layout_constraintTop_toBottomOf="@id/iv_heart"
                     app:layout_constraintVertical_bias="0"
-                    app:setNumberOfLikes="@{result.aggregateLikes}"
                     tools:text="100" />
 
                 <ImageView
@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textColor="@color/yellow"
-                    app:setNumberOfMinutes="@{result.readyInMinutes}"
+                    android:text="@{String.valueOf(result.readyInMinutes)}"
                     app:layout_constraintBottom_toBottomOf="@id/tv_heart_count"
                     app:layout_constraintEnd_toEndOf="@id/iv_clock"
                     app:layout_constraintStart_toStartOf="@id/iv_clock"

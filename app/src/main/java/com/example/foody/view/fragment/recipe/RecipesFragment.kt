@@ -49,7 +49,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRecipesBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this@RecipesFragment
         binding.mainViewModel = this.mainViewModel
@@ -73,7 +73,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
             recipesViewModel.backOnline = it
         })
 
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             networkListener = NetworkListener()
             networkListener.checkNetworkAvailability(requireContext())
                 .collect { status ->
@@ -105,7 +105,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readRecipes.observeOnce(this@RecipesFragment, { database -> // lifecycleOwner를 viewLifecycleOwner로 했다가 FragmentJoke에서 와이파이를 끄면 앱이 터져서 lifeCycleOwner를 RecipesFragment로 바꿨다.
+            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, { database -> // lifecycleOwner를 viewLifecycleOwner로 했다가 FragmentJoke에서 와이파이를 끄면 앱이 터져서 lifeCycleOwner를 RecipesFragment로 바꿨다.
                 if (database.isNotEmpty() && !args.backFromBottomSheet) {
                     mAdapter.setData(database[0].foodRecipe) // 첫 번째 레시피 가져오기
                     hideShimmerEffect()

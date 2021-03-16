@@ -39,17 +39,18 @@ object RecipesRowBinding {
         }
     }
 
-    @BindingAdapter("app:setNumberOfLikes")
-    @JvmStatic
-    fun setNumberOfLikes(textView: TextView, likes: Int) {
-        textView.text = likes.toString()
-    }
-
-    @BindingAdapter("app:setNumberOfMinutes")
-    @JvmStatic
-    fun setNumberOfMinutes(textView: TextView, minutes: Int) {
-        textView.text = minutes.toString()
-    }
+    // 아래 2개의 함수는 직접 xml에서 string.valueOf를 통해 처리할 것이므로 주석처리 함.
+//    @BindingAdapter("app:setNumberOfLikes")
+//    @JvmStatic
+//    fun setNumberOfLikes(textView: TextView, likes: Int) {
+//        textView.text = likes.toString()
+//    }
+//
+//    @BindingAdapter("app:setNumberOfMinutes")
+//    @JvmStatic
+//    fun setNumberOfMinutes(textView: TextView, minutes: Int) {
+//        textView.text = minutes.toString()
+//    }
 
     @BindingAdapter("app:applyVeganColor")
     @JvmStatic

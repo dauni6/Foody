@@ -30,7 +30,7 @@ class FoodJokeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_food_joke, container, false)
         // 또는 아래와 같이 사용해도 됨
         //_binding = FragmentFoodJokeBinding.inflate(inflater, container, false)
