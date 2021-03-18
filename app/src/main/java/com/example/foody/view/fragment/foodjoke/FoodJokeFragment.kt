@@ -32,7 +32,7 @@ class FoodJokeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_food_joke, container, false)
-        // 또는 아래와 같이 사용해도 됨
+        // 또는 아래와 같이 사용해도 됨(단, 아래의 경우는 viewBinding을 inflate할 때 주로 사용)
         //_binding = FragmentFoodJokeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.mainViewModel = mainViewModel
