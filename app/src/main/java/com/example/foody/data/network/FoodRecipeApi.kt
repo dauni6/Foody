@@ -10,7 +10,7 @@ import retrofit2.http.QueryMap
 interface FoodRecipeApi {
 
     @GET("recipes/complexSearch")
-    suspend fun getRecipes(
+    suspend fun getRecipes( // 네트워크 통신은 main-thread(ui-thread)에서 돌아갈 수 없으므로 dispatchers.io를 통하여 호출해야함. 따라서 suspend keyword를 넣어야 한다.
         @QueryMap queries: Map<String, String>
     ): Response<FoodRecipe>
 
