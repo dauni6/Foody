@@ -7,7 +7,7 @@ import com.example.foody.util.Constants.Companion.RECIPES_TABLE
 
 @Entity(tableName = RECIPES_TABLE)
 class RecipesEntity(
-    var foodRecipe: FoodRecipe
+    var foodRecipe: FoodRecipe // FoodRecipe는 List<Result> 를 갖고 있음
 ) {
     @PrimaryKey(autoGenerate = false)
     var id: Int = 0

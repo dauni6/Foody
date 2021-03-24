@@ -34,4 +34,25 @@ class RecipesDiffUtil<T>(
 
     //요약하면 DiffUtil.CallBack을 만들고 거기에 oldList와 newList를 넘겨주고 dispatcherUpdateTo를 호출하면 된다
 
+    /**
+     * <코틀린의 동등성 연산자> == vs === vs equals
+     * https://wooooooak.github.io/kotlin/2019/02/24/kotiln_%EB%8F%99%EB%93%B1%EC%84%B1%EC%97%B0%EC%82%B0/
+     *
+     * 간단히 말해서 동등성이라 함은 값자체를 비교하는 것을 말한다.
+     * 자바에서는
+     * int a = 1;
+     * int b = 1;
+     * 일 때 a == b 는 true이지만
+     * String a = "hi";
+     * String b = "hi";를 하면
+     * a == b는 false이다. 왜냐하면 참조타입에서는 주소값을 비교하려하기 때문이다.
+     * 따라서 객체의 값을 비교하려면 eqauls를 사용하여 그 내용물이 같은지 비교할 수 있다.
+     * 그러나 코틀린에서는 ==를 사용하여 주소값이아닌 갑의 동승성을 비교한다
+     * 따라서 코틀린이라면
+     * val a: String = "hi";
+     * val b: String = "hi";
+     * 는 a == b일때 true이다. 왜냐하면 코틀린의 == 는 내부적으로 equals를 호출하기 때문이다.
+     * 그러면 객체의 주소값을 비교하려면 어떻게 하면 될까? 그건 바로 === 연산자를 사용하면 된다.
+     * */
+
 }

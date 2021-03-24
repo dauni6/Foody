@@ -38,6 +38,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() 
             binding.executePendingBindings()
         }
 
+        // 필요로 하는곳에서 만드는게 아니라 필요로하는 곳에서 갖다 쓰게만 하도록 아래와 같이 만들어서 주입시켜 준다는 느낌으로 해준다.
         companion object {
             fun from(parent: ViewGroup): RecipesViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
