@@ -22,8 +22,12 @@ import javax.inject.Inject
 
 private val Context.dataStore by preferencesDataStore(PREFERENCES_NAME)
 
+/**
+ * DataStoreRepsitory가 RecipesViewModel에서 사용되기 때문에 lifecycle을 RecipesViewModel에 맞추기 위해서
+ * @ViewModelScoped annotation을 사용
+ * */
 @ViewModelScoped
-class DataStoreRepository @Inject constructor(@ApplicationContext private val conText: Context) {
+class DataStoreRepository @Inject constructor(@ApplicationContext private val context: Context) {
 
     private object PreferenceKeys {
         val selectedMealType = stringPreferencesKey(PREFERENCES_MEAL_TYPE)
@@ -33,7 +37,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         val backOnline = booleanPreferencesKey(PREFERENCES_BACK_ONLINE)
     }
 
-    private val dataStore: DataStore<Preferences> = conText.dataStore
+    private val dataStore: DataStore<Preferences> = context.dataStore
 
     suspend fun saveBackOnline(backOnline: Boolean) {
         dataStore.edit { preferences ->
@@ -42,7 +46,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
     }
 
     suspend fun saveMealAndDietType(mealType: String, mealTypeId: Int, dietType: String, dietTypeId: Int) {
-        dataStore.edit {  preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferenceKeys.selectedMealType] = mealType
             preferences[PreferenceKeys.selectedMealTypeId] = mealTypeId
             preferences[PreferenceKeys.selectedDietType] = dietType

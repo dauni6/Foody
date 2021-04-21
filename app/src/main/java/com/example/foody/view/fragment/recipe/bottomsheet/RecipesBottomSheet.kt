@@ -50,8 +50,8 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
         binding.cgMealType.setOnCheckedChangeListener { group, selectedChipId ->
             val chip = group.findViewById<Chip>(selectedChipId)
             val selectedMealType = chip.text.toString().toLowerCase(Locale.ROOT)
-            mealTypeChip = selectedMealType
-            mealTypeChipId = selectedChipId
+            mealTypeChip = selectedMealType // bottomsheet에서 선택한 chip의 이름
+            mealTypeChipId = selectedChipId // bottomsheet에서 선택한 chip의 id
         }
 
         binding.cgDietType.setOnCheckedChangeListener { group, selectedChipId ->

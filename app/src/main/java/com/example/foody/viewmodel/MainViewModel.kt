@@ -151,7 +151,7 @@ class MainViewModel @Inject constructor(
                 return NetworkResult.Error(message = "Timeout")
             }
             response.code() == 402 -> { // 402 error = payment required.
-                return NetworkResult.Error(message = "API ket Limited.")
+                return NetworkResult.Error(message = "API key Limited.")
             }
             response.body()!!.results.isNullOrEmpty() -> {
                 return NetworkResult.Error(message = "Recipes not found.")
@@ -172,7 +172,10 @@ class MainViewModel @Inject constructor(
                 NetworkResult.Error(message = "Timeout")
             }
             response.code() == 402 -> { // 402 error = payment required.
-                NetworkResult.Error(message = "API ket Limited.")
+                NetworkResult.Error(message = "API key Limited.")
+            }
+            response.body()!!.text.isNullOrEmpty() -> {
+                return NetworkResult.Error(message = "Joke not found")
             }
             response.isSuccessful -> {
                 val foodJoke = response.body()

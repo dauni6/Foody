@@ -29,7 +29,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
-    private val args by navArgs<RecipesFragmentArgs>()
+    private val args by navArgs<RecipesFragmentArgs>() // navigation component에서 추가한 argument가 들어있음(my_nav.xml 확인해보기)
 
     private var _binding: FragmentRecipesBinding? = null
     private val binding get() = _binding!!
@@ -67,8 +67,14 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     }
 
-    private fun startNetworkListener() {
+    private fun setupRecyclerView() {
+        binding.recyclerView.apply {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }
+    }
 
+    private fun startNetworkListener() {
         recipesViewModel.readBackOnline.observe(viewLifecycleOwner, {
             recipesViewModel.backOnline = it
         })
@@ -77,7 +83,6 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
             networkListener = NetworkListener()
             networkListener.checkNetworkAvailability(requireContext())
                 .collect { status ->
-                    Timber.d("NetworkListener status = $status")
                     recipesViewModel.networkStatus = status
                     recipesViewModel.showNetworkStatus()
                     readDatabase()
@@ -87,6 +92,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun actionToBottomSheet() {
         binding.fabRecipe.setOnClickListener {
+            // 네트워크 연결이 되어있을 때만
             if (recipesViewModel.networkStatus) {
                 findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
             } else {
@@ -95,21 +101,13 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         }
     }
 
-    private fun setupRecyclerView() {
-        binding.recyclerView.apply {
-            adapter = mAdapter
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
-        }
-    }
-
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, { database -> // lifecycleOwner를 viewLifecycleOwner로 했다가 FragmentJoke에서 와이파이를 끄면 앱이 터져서 lifeCycleOwner를 RecipesFragment로 바꿨다.
-                if (database.isNotEmpty() && !args.backFromBottomSheet) {
-                    mAdapter.setData(database[0].foodRecipe) // 첫 번째 레시피 가져오기
+            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, { database ->
+                if (database.isNotEmpty() && !args.backFromBottomSheet) { // ROOM에 데이터가 있다면 가져온 데이터로 보여주기
+                    mAdapter.setData(database[0].foodRecipe)
                     hideShimmerEffect()
-                } else {
+                } else { // 없다면 다시 Remote로 요청
                     requestApiData()
                 }
             })
@@ -126,9 +124,9 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
                         mAdapter.setData(it)
                     }
                 }
-                is NetworkResult.Error -> {
+                is NetworkResult.Error -> { // 인터넷 연결이 안되어 있으면
                     hideShimmerEffect()
-                    loadDataFromCache()
+                    loadDataFromCache() // 에러를 받으면 ROOM에 있는 데이터를 보여주기
                     Toast.makeText(
                         requireContext(),
                         response.message.toString(),
@@ -153,29 +151,24 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun searchAPIData(searchQuery: String) {
-        Timber.d("searchAPIData() -> searchQuery is $searchQuery")
         showShimmerEffect()
         val queryMap = recipesViewModel.applySearchQuery(searchQuery)
         mainViewModel.searchRecipes(queryMap)
         mainViewModel.searchRecipesResponse.observe(viewLifecycleOwner, { response ->
             when(response) {
                 is NetworkResult.Success -> {
-                    Timber.d("searchAPIData() -> Success")
                     hideShimmerEffect()
                     val foodRecipe = response.data
                     foodRecipe?.let { mAdapter.setData(it) }
                 }
 
                 is NetworkResult.Error -> {
-                    Timber.d("searchAPIData() -> Error")
                     hideShimmerEffect()
                     loadDataFromCache()
                     Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
                 }
 
                 is NetworkResult.Loading -> {
-                    Timber.d("searchAPIData() -> Loading")
-
                     showShimmerEffect()
                 }
             }
